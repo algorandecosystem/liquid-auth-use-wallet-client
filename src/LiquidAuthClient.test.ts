@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { LiquidAuthClient } from './LiquidAuthClient';
-import { SignalClient } from '@algorandfoundation/liquid-client';
+import { SignalClient } from '@algorandecosystem/liquid-client';
 import { LiquidOptions } from './interfaces';
 import { JSDOM } from 'jsdom';
 import { makePaymentTxnWithSuggestedParamsFromObject } from 'algosdk';
-import { encode } from 'cbor-x';
+import * as cbor from 'cbor';
 import { fromBase64Url, toBase64URL } from '@algorandfoundation/provider';
 import {INVALID_DATACHANNEL_CALLBACK} from "./exceptions";
 
@@ -15,7 +15,7 @@ globalThis.document = window.document;
 
 
 // Mock SignalClient
-vi.mock('@algorandfoundation/liquid-client', () => {
+vi.mock('@algorandecosystem/liquid-client', () => {
   class MockSignalClient {
     close = vi.fn();
     peer = vi.fn().mockResolvedValue({});
@@ -203,7 +203,7 @@ describe('LiquidAuthClient', () => {
       error: null,
     };
 
-    const encodedSuccessMessage = toBase64URL(encode(successMessage));
+    const encodedSuccessMessage = toBase64URL(cbor.encode(successMessage));
     setTimeout(() => {
       dataChannel.onmessage!({
         data: encodedSuccessMessage,
@@ -242,7 +242,7 @@ describe('LiquidAuthClient', () => {
       error: null,
     };
 
-    const encodedMismatchMessage = toBase64URL(encode(mismatchMessage));
+    const encodedMismatchMessage = toBase64URL(cbor.encode(mismatchMessage));
 
     setTimeout(() => {
       dataChannel.onmessage!({
@@ -321,7 +321,7 @@ describe('LiquidAuthClient', () => {
           const linkMessage = {
             data: 'test-message'
           };
-          const encodedLinkMessage = toBase64URL(encode(linkMessage));
+          const encodedLinkMessage = toBase64URL(cbor.encode(linkMessage));
           callback({ data: encodedLinkMessage });
         }, 0);
       }

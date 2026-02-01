@@ -1,6 +1,6 @@
 {
-  "name": "@algorandfoundation/liquid-auth-use-wallet-client",
-  "version": "1.4.0-canary.2",
+  "name": "@algorandecosystem/liquid-auth-use-wallet-client",
+  "version": "1.0.0-beta.1",
   "description": "A TypeScript library for Liquid Auth's Use-Wallet Client",
   "main": "lib/index.js",
   "type": "module",
@@ -23,12 +23,12 @@
     }
   },
   "keywords": [],
-  "author": "Algorand Foundation",
+  "author": "Algorand Ecosystem",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@algorandfoundation/liquid-client": "1.0.0-canary.3",
+    "@algorandecosystem/liquid-client": "github:algorandecosystem/liquid-auth-js#falcon24-support",
     "@algorandfoundation/provider": "github:algorandfoundation/wallet-provider-ts",
-    "cbor-x": "^1.6.0"
+    "cbor": "^10.0.11"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
