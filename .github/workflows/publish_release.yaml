@@ -1,6 +1,9 @@
 name: Publish Release
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 concurrency: release
@@ -31,6 +34,7 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           ref: ${{ github.ref }}
+          fetch-depth: 0
 
       # semantic-release needs node 20
       - name: Use Node.js 20.x
