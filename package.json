@@ -25,6 +25,10 @@
   "keywords": [],
   "author": "Algorand Ecosystem",
   "license": "AGPL-3.0",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "dependencies": {
     "@algorandecosystem/liquid-client": "github:algorandecosystem/liquid-auth-js#falcon24-support",
     "@algorandfoundation/provider": "github:algorandfoundation/wallet-provider-ts",
