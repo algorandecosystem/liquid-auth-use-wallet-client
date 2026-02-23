@@ -1,3 +1,14 @@
+## [1.5.0](https://github.com/algorandecosystem/liquid-auth-use-wallet-client/compare/v1.4.0...v1.5.0) (2026-02-23)
+
+### Features
+
+* add initial working Falcon24 support ([#1](https://github.com/algorandecosystem/liquid-auth-use-wallet-client/issues/1)) ([0206cbc](https://github.com/algorandecosystem/liquid-auth-use-wallet-client/commit/0206cbcc02b57ff04e09921bcf40fd7d6d30b530))
+
+### Updates & Maintenance
+
+* make sure npm publish is public ([#3](https://github.com/algorandecosystem/liquid-auth-use-wallet-client/issues/3)) ([11e7985](https://github.com/algorandecosystem/liquid-auth-use-wallet-client/commit/11e7985415337429a52f86c0fa65ae727c4cff49))
+* semantic release fix ([#2](https://github.com/algorandecosystem/liquid-auth-use-wallet-client/issues/2)) ([cb4be41](https://github.com/algorandecosystem/liquid-auth-use-wallet-client/commit/cb4be41982e85221c5dc14ef264cc4b23133f2cf))
+
 # [1.4.0-canary.2](https://github.com/algorandfoundation/liquid-auth-use-wallet-client/compare/v1.4.0-canary.1...v1.4.0-canary.2) (2025-07-07)
 
 
