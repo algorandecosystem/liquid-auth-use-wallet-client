@@ -1,9 +1,9 @@
-import {LinkMessage, SignalClient} from '@algorandfoundation/liquid-client';
-import { decode } from 'cbor-x';
+import {LinkMessage, SignalClient} from '@algorandecosystem/liquid-client/signal';
+import * as cbor from 'cbor';
 import { fromBase64Url, toBase64URL, toSignTransactionsParamsRequestMessage } from '@algorandfoundation/provider';
 import { Transaction, encodeUnsignedTransaction } from 'algosdk';
 import { LiquidOptions } from './interfaces.js';
-import {INVALID_DATACHANNEL_CALLBACK} from "./exceptions";
+import {INVALID_DATACHANNEL_CALLBACK} from "./exceptions.js";
 
 export class LiquidAuthClient {
   public client: SignalClient;
@@ -20,27 +20,21 @@ export class LiquidAuthClient {
     this.client = new SignalClient(this.options.origin || window.origin);
     this.RTC_CONFIGURATION = {
       iceServers: [
-        {
-          urls: [
-            'stun:stun.l.google.com:19302',
-            'stun:stun1.l.google.com:19302',
-            'stun:stun2.l.google.com:19302',
-          ],
-        },
-        {
-          urls: [
-            "turn:global.turn.nodely.network:80?transport=tcp",
-            "turns:global.turn.nodely.network:443?transport=tcp",
-            "turn:eu.turn.nodely.io:80?transport=tcp",
-            "turns:eu.turn.nodely.io:443?transport=tcp",
-            "turn:us.turn.nodely.io:80?transport=tcp",
-            "turns:us.turn.nodely.io:443?transport=tcp",
-          ],
-          username: this.options.RTC_config_username,
-          credential: this.options.RTC_config_credential,
-        },
-      ],
-      iceCandidatePoolSize: 10,
+          {
+            urls: [
+              "stun:geo.turn.algonode.xyz:80",
+              "stun:global.turn.nodely.io:443"
+            ]
+          },
+          {
+            urls: [
+              "turn:geo.turn.algonode.xyz:80?transport=tcp",
+              "turns:global.turn.nodely.io:443?transport=tcp"
+            ],
+            "username": "liquid-auth",
+            "credential": "sqmcP4MiTKMT4TGEDSk9jgHY"
+          },
+        ]
     };
   }
 
@@ -69,6 +63,7 @@ export class LiquidAuthClient {
     try {
       const response = await fetch(`${this.options.origin || window.origin}/auth/logout`, {
         method: 'GET',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
         }
@@ -101,18 +96,24 @@ export class LiquidAuthClient {
 
     const awaitResponse = (): Promise<(Uint8Array | null)[]> => new Promise((resolve, reject) => {
       if (this.dataChannel) {
-        this.dataChannel.onmessage = async (evt: { data: string }) => {
-          const message = decode(fromBase64Url(evt.data));
-          if (message.reference === 'arc0027:sign_transactions:response') {
+        this.dataChannel.onmessage = (evt: { data: string }) => {
+          try {
+            const message = cbor.decodeFirstSync(fromBase64Url(evt.data));
+
+            if (message.reference === 'arc0027:sign_transactions:response') {
             if (message.requestId !== messageId) {
               reject(new Error('Request ID mismatch'));
               return;
             }
-            const encodedSignatures = message.result.stxns;
-            const transactionsToSend = (txnGroup as Transaction[]).map((txn, idx) => {
-              return txn.attachSignature(activeAddress, fromBase64Url(encodedSignatures[idx]));
+            const encodedStxns = message.result.stxns;
+            const signedTransactions = encodedStxns.map((stxn: string) => {
+              return fromBase64Url(stxn);
             });
-            resolve(transactionsToSend);
+
+            resolve(signedTransactions);
+            }
+          } catch (error) {
+            reject(new Error(`Failed to decode CBOR message: ${error}`));
           }
         };
       }
@@ -234,20 +235,19 @@ export class LiquidAuthClient {
       throw new TypeError(INVALID_DATACHANNEL_CALLBACK);
     }
     const qrLinkElement = this.modalElement!.querySelector('#qr-link') as HTMLAnchorElement;
-    let address: string | null = null;
     if (qrLinkElement) {
       qrLinkElement.href = 'https://github.com/algorandfoundation/liquid-auth-js';
-      this.client.peer(this.requestId!, 'offer', this.RTC_CONFIGURATION).then((dc)=>{
+      this.client.peer(this.requestId!, 'offer', this.RTC_CONFIGURATION).then((dc: RTCDataChannel)=>{
         this.handleDataChannel(dc)
-        onDataChannel(address!);
       });
 
       this.client.on('link-message', (message: LinkMessage ) => {
-        address = message.wallet;
+        const address = message.wallet;
         const offerElement = this.modalElement!.querySelector('.offer') as HTMLElement;
         if (offerElement) {
           offerElement.classList.add('hidden');
         }
+        onDataChannel(address);
       });
 
       const image = this.modalElement!.querySelector('#liquid-qr-code') as HTMLImageElement;

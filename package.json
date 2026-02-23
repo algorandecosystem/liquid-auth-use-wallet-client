@@ -1,6 +1,6 @@
 {
-  "name": "@algorandfoundation/liquid-auth-use-wallet-client",
-  "version": "1.4.0-canary.2",
+  "name": "@algorandecosystem/liquid-auth-use-wallet-client",
+  "version": "1.0.0-beta.1",
   "description": "A TypeScript library for Liquid Auth's Use-Wallet Client",
   "main": "lib/index.js",
   "type": "module",
@@ -23,15 +23,16 @@
     }
   },
   "keywords": [],
-  "author": "Algorand Foundation",
+  "author": "Algorand Ecosystem",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@algorandfoundation/liquid-client": "1.0.0-canary.3",
+    "@algorandecosystem/liquid-client": "github:algorandecosystem/liquid-auth-js#falcon24-support",
     "@algorandfoundation/provider": "github:algorandfoundation/wallet-provider-ts",
-    "cbor-x": "^1.6.0"
+    "cbor": "^10.0.11"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
+    "@rollup/rollup-linux-x64-gnu": "^4.59.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/npm": "^12.0.1",
@@ -55,9 +56,124 @@
   ],
   "release": {
     "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "angular",
+          "releaseRules": [
+            {
+              "type": "breaking",
+              "release": "major"
+            },
+            {
+              "type": "feat",
+              "release": "minor"
+            },
+            {
+              "type": "chore",
+              "release": "minor"
+            },
+            {
+              "type": "ci",
+              "release": "patch"
+            },
+            {
+              "type": "fix",
+              "release": "patch"
+            },
+            {
+              "type": "docs",
+              "release": "patch"
+            },
+            {
+              "type": "test",
+              "release": "patch"
+            },
+            {
+              "type": "refactor",
+              "release": "patch"
+            },
+            {
+              "type": "style",
+              "release": "patch"
+            },
+            {
+              "type": "build",
+              "release": "patch"
+            },
+            {
+              "type": "revert",
+              "release": "patch"
+            }
+          ]
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "types": [
+              {
+                "type": "breaking",
+                "section": "Breaking",
+                "hidden": false
+              },
+              {
+                "type": "feat",
+                "section": "Features",
+                "hidden": false
+              },
+              {
+                "type": "fix",
+                "section": "Bug Fixes",
+                "hidden": false
+              },
+              {
+                "type": "docs",
+                "section": "Documentation",
+                "hidden": false
+              },
+              {
+                "type": "style",
+                "section": "Updates & Maintenance",
+                "hidden": false
+              },
+              {
+                "type": "refactor",
+                "section": "Updates & Maintenance",
+                "hidden": false
+              },
+              {
+                "type": "perf",
+                "section": "Updates & Maintenance",
+                "hidden": false
+              },
+              {
+                "type": "test",
+                "section": "Updates & Maintenance",
+                "hidden": false
+              },
+              {
+                "type": "ci",
+                "section": "Updates & Maintenance",
+                "hidden": false
+              },
+              {
+                "type": "chore",
+                "section": "Updates & Maintenance",
+                "hidden": false
+              }
+            ]
+          }
+        }
+      ],
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "CHANGELOG.md"
+        }
+      ],
       "@semantic-release/npm",
       [
         "@semantic-release/git",
@@ -77,11 +193,8 @@
       ]
     ],
     "branches": [
-      "release/*",
-      {
-        "name": "main",
-        "prerelease": "canary"
-      }
+      "main",
+      "falcon24-support"
     ]
   }
 }

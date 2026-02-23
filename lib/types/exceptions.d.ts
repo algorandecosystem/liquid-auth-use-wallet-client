@@ -1,0 +1,1 @@
+export declare const INVALID_DATACHANNEL_CALLBACK = "Must provide a valid callback";
