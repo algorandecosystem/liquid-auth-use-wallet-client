@@ -30,7 +30,7 @@
     "provenance": true
   },
   "dependencies": {
-    "@algorandecosystem/liquid-client": "github:algorandecosystem/liquid-auth-js#falcon24-support",
+    "@algorandecosystem/liquid-client": "^1.0.0",
     "@algorandfoundation/provider": "github:algorandfoundation/wallet-provider-ts",
     "cbor": "^10.0.11"
   },
