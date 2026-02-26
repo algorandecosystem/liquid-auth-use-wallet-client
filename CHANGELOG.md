@@ -1,3 +1,9 @@
+## [1.5.1](https://github.com/algorandecosystem/liquid-auth-use-wallet-client/compare/v1.5.0...v1.5.1) (2026-02-26)
+
+### Updates & Maintenance
+
+* update liquid auth client to use npm version ([721ae74](https://github.com/algorandecosystem/liquid-auth-use-wallet-client/commit/721ae744666cd134721e3a55e793717c89108b44))
+
 ## [1.5.0](https://github.com/algorandecosystem/liquid-auth-use-wallet-client/compare/v1.4.0...v1.5.0) (2026-02-23)
 
 ### Features
